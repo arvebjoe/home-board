@@ -57,7 +57,7 @@ class AdminScreen extends ConsumerWidget {
                         context,
                         title: 'Verification Queue',
                         icon: Icons.verified,
-                        onTap: () {},
+                        onTap: () => context.go('/admin/verification-queue'),
                       ),
                       _buildAdminCard(
                         context,

@@ -9,6 +9,7 @@ import '../../features/admin/screens/admin_screen.dart';
 import '../../features/admin/screens/user_management_screen.dart';
 import '../../features/admin/screens/task_definition_management_screen.dart';
 import '../../features/admin/screens/task_assignment_management_screen.dart';
+import '../../features/admin/screens/verification_queue_screen.dart';
 import '../../features/leaderboard/screens/leaderboard_screen.dart';
 
 part 'app_router.g.dart';
@@ -68,6 +69,11 @@ GoRouter router(RouterRef ref) {
         path: '/admin/assignments',
         name: 'admin-assignments',
         builder: (context, state) => const TaskAssignmentManagementScreen(),
+      ),
+      GoRoute(
+        path: '/admin/verification-queue',
+        name: 'admin-verification-queue',
+        builder: (context, state) => const VerificationQueueScreen(),
       ),
       GoRoute(
         path: '/leaderboard',

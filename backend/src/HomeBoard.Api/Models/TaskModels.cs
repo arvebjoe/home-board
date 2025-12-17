@@ -69,3 +69,9 @@ public class TodayTaskDto
     public Guid? CompletionId { get; set; }
     public Domain.Enums.TaskStatus? Status { get; set; }
 }
+
+public class CompleteTaskRequest
+{
+    public string? Notes { get; set; }
+    public string? PhotoUrl { get; set; }
+}

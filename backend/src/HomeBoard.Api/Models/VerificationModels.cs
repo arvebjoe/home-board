@@ -9,7 +9,7 @@ public class VerifyTaskRequest
 
 public class RejectTaskRequest
 {
-    public required string Reason { get; set; }
+    public string? Reason { get; set; }
 }
 
 public class PendingVerificationDto

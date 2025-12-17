@@ -13,6 +13,8 @@ public class TaskCompletion
     public Guid? VerifiedByUserId { get; set; }
     public DateTime? VerifiedAt { get; set; }
     public string? RejectionReason { get; set; }
+    public string? Notes { get; set; }
+    public string? PhotoUrl { get; set; }
 
     // Navigation properties
     public TaskAssignment? TaskAssignment { get; set; }

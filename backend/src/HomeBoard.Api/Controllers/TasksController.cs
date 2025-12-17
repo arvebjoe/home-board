@@ -256,7 +256,7 @@ public class TasksController : ControllerBase
     }
 
     [HttpPost("{assignmentId}/complete")]
-    public async Task<IActionResult> CompleteTask(Guid assignmentId)
+    public async Task<IActionResult> CompleteTask(Guid assignmentId, [FromBody] CompleteTaskRequest? request)
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
@@ -286,7 +286,9 @@ public class TasksController : ControllerBase
             Date = today,
             CompletedByUserId = userId,
             CompletedAt = DateTime.UtcNow,
-            Status = Domain.Enums.TaskStatus.Completed
+            Status = Domain.Enums.TaskStatus.Completed,
+            Notes = request?.Notes,
+            PhotoUrl = request?.PhotoUrl
         };
 
         _context.TaskCompletions.Add(completion);

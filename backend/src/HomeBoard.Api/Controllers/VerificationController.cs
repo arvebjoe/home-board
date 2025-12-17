@@ -24,7 +24,7 @@ public class VerificationController : ControllerBase
     }
 
     [HttpGet("pending")]
-    public async Task<ActionResult<List<PendingVerificationDto>>> GetPendingVerifications()
+    public async Task<ActionResult> GetPendingVerifications()
     {
         var pending = await _context.TaskCompletions
             .Include(c => c.TaskAssignment)
@@ -32,15 +32,18 @@ public class VerificationController : ControllerBase
             .Include(c => c.CompletedByUser)
             .Where(c => c.Status == Domain.Enums.TaskStatus.Completed)
             .OrderBy(c => c.CompletedAt)
-            .Select(c => new PendingVerificationDto
+            .Select(c => new
             {
-                CompletionId = c.Id,
-                Date = c.Date,
-                TaskTitle = c.TaskAssignment!.TaskDefinition!.Title,
-                CompletedByName = c.CompletedByUser!.DisplayName,
-                CompletedByUserId = c.CompletedByUserId,
-                CompletedAt = c.CompletedAt,
-                DefaultPoints = c.TaskAssignment.TaskDefinition.DefaultPoints
+                id = c.Id,
+                taskTitle = c.TaskAssignment!.TaskDefinition!.Title,
+                taskDescription = c.TaskAssignment.TaskDefinition.Description,
+                points = c.TaskAssignment.TaskDefinition.DefaultPoints,
+                completedByUserId = c.CompletedByUserId,
+                completedByUserName = c.CompletedByUser!.DisplayName,
+                completedAt = c.CompletedAt,
+                date = c.Date,
+                notes = c.Notes,
+                photoUrl = c.PhotoUrl
             })
             .ToListAsync();
 
