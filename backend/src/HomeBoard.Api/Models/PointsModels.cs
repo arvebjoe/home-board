@@ -3,8 +3,10 @@ namespace HomeBoard.Api.Models;
 public class LeaderboardEntryDto
 {
     public Guid UserId { get; set; }
+    public required string UserName { get; set; }
     public required string DisplayName { get; set; }
     public int TotalPoints { get; set; }
+    public int TasksCompleted { get; set; }
     public int Rank { get; set; }
 }
 
