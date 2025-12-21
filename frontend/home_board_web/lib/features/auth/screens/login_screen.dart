@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/l10n/l10n_extensions.dart';
 import '../providers/auth_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -64,20 +65,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Home Board',
+                      context.l10n.appTitle,
                       style: Theme.of(context).textTheme.headlineMedium,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 32),
                     TextFormField(
                       controller: _usernameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Username',
-                        prefixIcon: Icon(Icons.person),
+                      decoration: InputDecoration(
+                        labelText: context.l10n.username,
+                        prefixIcon: const Icon(Icons.person),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter username';
+                          return context.l10n.usernameRequired;
                         }
                         return null;
                       },
@@ -87,7 +88,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       controller: _passwordController,
                       obscureText: _obscurePassword,
                       decoration: InputDecoration(
-                        labelText: 'Password',
+                        labelText: context.l10n.password,
                         prefixIcon: const Icon(Icons.lock),
                         suffixIcon: IconButton(
                           icon: Icon(
@@ -104,7 +105,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter password';
+                          return context.l10n.passwordRequired;
                         }
                         return null;
                       },
@@ -116,12 +117,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     else
                       ElevatedButton(
                         onPressed: _handleLogin,
-                        child: const Text('Login'),
+                        child: Text(context.l10n.login),
                       ),
                     if (authState.hasError) ...[
                       const SizedBox(height: 16),
                       Text(
-                        'Login failed. Please check your credentials.',
+                        context.l10n.loginFailed,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.error,
                         ),

@@ -30,6 +30,21 @@
     "description": "Login button text"
   },
   
+  "usernameRequired": "Please enter username",
+  "@usernameRequired": {
+    "description": "Validation message for username field"
+  },
+  
+  "passwordRequired": "Please enter password",
+  "@passwordRequired": {
+    "description": "Validation message for password field"
+  },
+  
+  "loginFailed": "Login failed. Please check your credentials.",
+  "@loginFailed": {
+    "description": "Error message when login fails"
+  },
+  
   "todayTasks": "Today's Tasks",
   "@todayTasks": {
     "description": "Title for today's tasks screen"

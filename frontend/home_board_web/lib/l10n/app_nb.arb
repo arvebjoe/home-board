@@ -1,11 +1,17 @@
 {
   "@@locale": "nb",
-  "appTitle": "Hjemmestyret",
+  "appTitle": "Emil og Emely's oppgaver",
   "login": "Logg inn",
   "logout": "Logg ut",
   "username": "Brukernavn",
   "password": "Passord",
   "loginButton": "Logg inn",
+  
+  "usernameRequired": "Vennligst skriv inn brukernavn",
+  
+  "passwordRequired": "Vennligst skriv inn passord",
+  
+  "loginFailed": "Pålogging mislyktes. Vennligst sjekk påloggingsinformasjonen din.",
   "todayTasks": "Dagens oppgaver",
   "myTasksForToday": "Mine oppgaver for i dag",
   "noTasksToday": "Ingen oppgaver i dag!",
