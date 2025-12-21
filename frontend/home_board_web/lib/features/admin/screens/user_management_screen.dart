@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/l10n/l10n_extensions.dart';
 import '../models/user_management_models.dart';
 import '../providers/user_management_provider.dart';
 
@@ -19,7 +20,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User Management'),
+        title: Text(context.l10n.userManagement),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.go('/admin'),
@@ -44,13 +45,13 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Users',
+                      context.l10n.users,
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     ElevatedButton.icon(
                       onPressed: () => _showCreateUserDialog(context),
                       icon: const Icon(Icons.add),
-                      label: const Text('Add User'),
+                      label: Text(context.l10n.addUser),
                     ),
                   ],
                 ),
@@ -70,7 +71,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                               ),
                               const SizedBox(height: 16),
                               Text(
-                                'No users found',
+                                context.l10n.noUsersFound,
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
                             ],
@@ -102,12 +103,12 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            'Error loading users',
+                            context.l10n.errorLoadingTasks,
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            error.toString(),
+                            context.l10n.errorMessage(error.toString()),
                             style: Theme.of(context).textTheme.bodyMedium,
                             textAlign: TextAlign.center,
                           ),
@@ -116,7 +117,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                             onPressed: () => ref
                                 .read(userManagementProvider.notifier)
                                 .refresh(),
-                            child: const Text('Retry'),
+                            child: Text(context.l10n.retry),
                           ),
                         ],
                       ),
@@ -196,33 +197,33 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                 }
               },
               itemBuilder: (context) => [
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'edit',
                   child: Row(
                     children: [
-                      Icon(Icons.edit),
-                      SizedBox(width: 8),
-                      Text('Edit'),
+                      const Icon(Icons.edit),
+                      const SizedBox(width: 8),
+                      Text(context.l10n.edit),
                     ],
                   ),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'reset_password',
                   child: Row(
                     children: [
-                      Icon(Icons.lock_reset),
-                      SizedBox(width: 8),
-                      Text('Reset Password'),
+                      const Icon(Icons.lock_reset),
+                      const SizedBox(width: 8),
+                      Text(context.l10n.resetPassword),
                     ],
                   ),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'delete',
                   child: Row(
                     children: [
-                      Icon(Icons.delete, color: Colors.red),
-                      SizedBox(width: 8),
-                      Text('Delete', style: TextStyle(color: Colors.red)),
+                      const Icon(Icons.delete, color: Colors.red),
+                      const SizedBox(width: 8),
+                      Text(context.l10n.delete, style: const TextStyle(color: Colors.red)),
                     ],
                   ),
                 ),
@@ -246,7 +247,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
       context: context,
       builder: (dialogContext) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: const Text('Create New User'),
+          title: Text(context.l10n.createNewUser),
           content: SizedBox(
             width: 400,
             child: Column(
@@ -254,9 +255,9 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
               children: [
                 TextField(
                   controller: usernameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Username',
-                    prefixIcon: Icon(Icons.person),
+                  decoration: InputDecoration(
+                    labelText: context.l10n.username,
+                    prefixIcon: const Icon(Icons.person),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -270,9 +271,9 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                 const SizedBox(height: 16),
                 TextField(
                   controller: passwordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    prefixIcon: Icon(Icons.lock),
+                  decoration: InputDecoration(
+                    labelText: context.l10n.password,
+                    prefixIcon: const Icon(Icons.lock),
                   ),
                   obscureText: true,
                 ),
@@ -304,7 +305,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
           actions: [
             TextButton(
               onPressed: isLoading ? null : () => Navigator.pop(dialogContext),
-              child: const Text('Cancel'),
+              child: Text(context.l10n.cancel),
             ),
             ElevatedButton(
               onPressed: isLoading
@@ -329,8 +330,8 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                         if (dialogContext.mounted) {
                           Navigator.pop(dialogContext);
                           ScaffoldMessenger.of(this.context).showSnackBar(
-                            const SnackBar(
-                              content: Text('User created successfully'),
+                            SnackBar(
+                              content: Text(context.l10n.userCreatedSuccessfully),
                               backgroundColor: Colors.green,
                             ),
                           );
@@ -348,7 +349,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                       height: 20,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : const Text('Create'),
+                  : Text(context.l10n.create),
             ),
           ],
         ),
@@ -368,7 +369,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
       context: context,
       builder: (dialogContext) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: const Text('Edit User'),
+          title: Text(context.l10n.editUser),
           content: SizedBox(
             width: 400,
             child: Column(
@@ -376,30 +377,30 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
               children: [
                 TextField(
                   controller: TextEditingController(text: user.username),
-                  decoration: const InputDecoration(
-                    labelText: 'Username',
-                    prefixIcon: Icon(Icons.person),
+                  decoration: InputDecoration(
+                    labelText: context.l10n.username,
+                    prefixIcon: const Icon(Icons.person),
                   ),
                   enabled: false,
                 ),
                 const SizedBox(height: 16),
                 TextField(
                   controller: displayNameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Display Name',
-                    prefixIcon: Icon(Icons.badge),
+                  decoration: InputDecoration(
+                    labelText: context.l10n.displayName,
+                    prefixIcon: const Icon(Icons.badge),
                   ),
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
                   value: selectedRole,
-                  decoration: const InputDecoration(
-                    labelText: 'Role',
-                    prefixIcon: Icon(Icons.admin_panel_settings),
+                  decoration: InputDecoration(
+                    labelText: context.l10n.role,
+                    prefixIcon: const Icon(Icons.admin_panel_settings),
                   ),
-                  items: const [
-                    DropdownMenuItem(value: 'User', child: Text('User')),
-                    DropdownMenuItem(value: 'Admin', child: Text('Admin')),
+                  items: [
+                    DropdownMenuItem(value: 'User', child: Text(context.l10n.user)),
+                    DropdownMenuItem(value: 'Admin', child: Text(context.l10n.admin)),
                   ],
                   onChanged: (value) {
                     setState(() => selectedRole = value!);
@@ -418,7 +419,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
           actions: [
             TextButton(
               onPressed: isLoading ? null : () => Navigator.pop(dialogContext),
-              child: const Text('Cancel'),
+              child: Text(context.l10n.cancel),
             ),
             ElevatedButton(
               onPressed: isLoading
@@ -442,8 +443,8 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                         if (dialogContext.mounted) {
                           Navigator.pop(dialogContext);
                           ScaffoldMessenger.of(this.context).showSnackBar(
-                            const SnackBar(
-                              content: Text('User updated successfully'),
+                            SnackBar(
+                              content: Text(context.l10n.userUpdatedSuccessfully),
                               backgroundColor: Colors.green,
                             ),
                           );
@@ -461,7 +462,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                       height: 20,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : const Text('Save'),
+                  : Text(context.l10n.save),
             ),
           ],
         ),
@@ -479,7 +480,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
       context: context,
       builder: (dialogContext) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: Text('Reset Password for ${user.displayName}'),
+          title: Text(context.l10n.resetPasswordFor(user.displayName)),
           content: SizedBox(
             width: 400,
             child: Column(
@@ -487,9 +488,9 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
               children: [
                 TextField(
                   controller: passwordController,
-                  decoration: const InputDecoration(
-                    labelText: 'New Password',
-                    prefixIcon: Icon(Icons.lock),
+                  decoration: InputDecoration(
+                    labelText: context.l10n.newPassword,
+                    prefixIcon: const Icon(Icons.lock),
                   ),
                   obscureText: true,
                 ),
@@ -506,7 +507,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
           actions: [
             TextButton(
               onPressed: isLoading ? null : () => Navigator.pop(dialogContext),
-              child: const Text('Cancel'),
+              child: Text(context.l10n.cancel),
             ),
             ElevatedButton(
               onPressed: isLoading
@@ -529,8 +530,8 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                         if (dialogContext.mounted) {
                           Navigator.pop(dialogContext);
                           ScaffoldMessenger.of(this.context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Password reset successfully'),
+                            SnackBar(
+                              content: Text(context.l10n.passwordResetSuccessfully),
                               backgroundColor: Colors.green,
                             ),
                           );
@@ -548,7 +549,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                       height: 20,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : const Text('Reset'),
+                  : Text(context.l10n.resetPassword),
             ),
           ],
         ),
@@ -565,12 +566,12 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
       context: context,
       builder: (dialogContext) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: const Text('Delete User'),
+          title: Text(context.l10n.deleteUser),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Are you sure you want to delete ${user.displayName}?'),
+              Text(context.l10n.deleteUserConfirmation(user.displayName)),
               const SizedBox(height: 8),
               const Text(
                 'This action cannot be undone.',
@@ -588,7 +589,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
           actions: [
             TextButton(
               onPressed: isLoading ? null : () => Navigator.pop(dialogContext),
-              child: const Text('Cancel'),
+              child: Text(context.l10n.cancel),
             ),
             ElevatedButton(
               onPressed: isLoading
@@ -606,8 +607,8 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                         if (dialogContext.mounted) {
                           Navigator.pop(dialogContext);
                           ScaffoldMessenger.of(this.context).showSnackBar(
-                            const SnackBar(
-                              content: Text('User deleted successfully'),
+                            SnackBar(
+                              content: Text(context.l10n.userDeletedSuccessfully),
                               backgroundColor: Colors.green,
                             ),
                           );
@@ -629,7 +630,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                       height: 20,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : const Text('Delete'),
+                  : Text(context.l10n.delete),
             ),
           ],
         ),

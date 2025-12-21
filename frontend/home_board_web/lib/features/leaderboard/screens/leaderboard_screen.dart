@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/l10n/l10n_extensions.dart';
 import '../providers/leaderboard_provider.dart';
 
 class LeaderboardScreen extends ConsumerStatefulWidget {
@@ -19,7 +20,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Leaderboard'),
+        title: Text(context.l10n.leaderboard),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.go('/'),
@@ -40,26 +41,26 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'Top Performers',
+                  context.l10n.topPerformers,
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 16),
                 SegmentedButton<String>(
-                  segments: const [
+                  segments: [
                     ButtonSegment(
                       value: 'week',
-                      label: Text('Week'),
-                      icon: Icon(Icons.calendar_view_week),
+                      label: Text(context.l10n.week),
+                      icon: const Icon(Icons.calendar_view_week),
                     ),
                     ButtonSegment(
                       value: 'month',
-                      label: Text('Month'),
-                      icon: Icon(Icons.calendar_month),
+                      label: Text(context.l10n.month),
+                      icon: const Icon(Icons.calendar_month),
                     ),
                     ButtonSegment(
                       value: 'all',
-                      label: Text('All Time'),
-                      icon: Icon(Icons.all_inclusive),
+                      label: Text(context.l10n.allTime),
+                      icon: const Icon(Icons.all_inclusive),
                     ),
                   ],
                   selected: {_selectedPeriod},
@@ -88,12 +89,12 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                               ),
                               const SizedBox(height: 16),
                               Text(
-                                'No entries yet',
+                                context.l10n.noEntriesYet,
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                'Complete tasks to appear here!',
+                                context.l10n.completeTasksToAppear,
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
                             ],
@@ -131,12 +132,12 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            'Error loading leaderboard',
+                            context.l10n.errorLoadingTasks,
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            error.toString(),
+                            context.l10n.errorMessage(error.toString()),
                             style: Theme.of(context).textTheme.bodyMedium,
                             textAlign: TextAlign.center,
                           ),
@@ -144,7 +145,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                           ElevatedButton(
                             onPressed: () =>
                                 ref.read(leaderboardProvider.notifier).refresh(),
-                            child: const Text('Retry'),
+                            child: Text(context.l10n.retry),
                           ),
                         ],
                       ),
@@ -208,7 +209,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '$tasksCompleted tasks completed',
+                    context.l10n.tasksCompleted(tasksCompleted),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Colors.grey[600],
                         ),

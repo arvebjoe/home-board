@@ -338,5 +338,503 @@
         "example": "Network error"
       }
     }
+  },
+  
+  "addUser": "Add User",
+  "@addUser": {
+    "description": "Add user button"
+  },
+  
+  "noUsersFound": "No users found",
+  "@noUsersFound": {
+    "description": "Message when no users exist"
+  },
+  
+  "edit": "Edit",
+  "@edit": {
+    "description": "Edit button"
+  },
+  
+  "delete": "Delete",
+  "@delete": {
+    "description": "Delete button"
+  },
+  
+  "resetPassword": "Reset Password",
+  "@resetPassword": {
+    "description": "Reset password button"
+  },
+  
+  "createNewUser": "Create New User",
+  "@createNewUser": {
+    "description": "Create user dialog title"
+  },
+  
+  "displayName": "Display Name",
+  "@displayName": {
+    "description": "Display name field label"
+  },
+  
+  "user": "User",
+  "@user": {
+    "description": "User role"
+  },
+  
+  "admin": "Admin",
+  "@admin": {
+    "description": "Admin role"
+  },
+  
+  "create": "Create",
+  "@create": {
+    "description": "Create button"
+  },
+  
+  "save": "Save",
+  "@save": {
+    "description": "Save button"
+  },
+  
+  "userCreatedSuccessfully": "User created successfully",
+  "@userCreatedSuccessfully": {
+    "description": "Success message after creating user"
+  },
+  
+  "editUser": "Edit User",
+  "@editUser": {
+    "description": "Edit user dialog title"
+  },
+  
+  "userUpdatedSuccessfully": "User updated successfully",
+  "@userUpdatedSuccessfully": {
+    "description": "Success message after updating user"
+  },
+  
+  "resetPasswordFor": "Reset Password for {name}",
+  "@resetPasswordFor": {
+    "description": "Reset password dialog title",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "John Doe"
+      }
+    }
+  },
+  
+  "newPassword": "New Password",
+  "@newPassword": {
+    "description": "New password field label"
+  },
+  
+  "passwordResetSuccessfully": "Password reset successfully",
+  "@passwordResetSuccessfully": {
+    "description": "Success message after resetting password"
+  },
+  
+  "deleteUser": "Delete User",
+  "@deleteUser": {
+    "description": "Delete user dialog title"
+  },
+  
+  "deleteUserConfirmation": "Are you sure you want to delete \"{name}\"?",
+  "@deleteUserConfirmation": {
+    "description": "Delete user confirmation message",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "John Doe"
+      }
+    }
+  },
+  
+  "userDeletedSuccessfully": "User deleted successfully",
+  "@userDeletedSuccessfully": {
+    "description": "Success message after deleting user"
+  },
+  
+  "topPerformers": "Top Performers",
+  "@topPerformers": {
+    "description": "Leaderboard heading"
+  },
+  
+  "week": "Week",
+  "@week": {
+    "description": "Week time period"
+  },
+  
+  "month": "Month",
+  "@month": {
+    "description": "Month time period"
+  },
+  
+  "allTime": "All Time",
+  "@allTime": {
+    "description": "All time period"
+  },
+  
+  "noEntriesYet": "No entries yet",
+  "@noEntriesYet": {
+    "description": "Message when leaderboard is empty"
+  },
+  
+  "completeTasksToAppear": "Complete tasks to appear here!",
+  "@completeTasksToAppear": {
+    "description": "Encouraging message for empty leaderboard"
+  },
+  
+  "rank": "Rank",
+  "@rank": {
+    "description": "Rank label"
+  },
+  
+  "tasksCompleted": "{count} tasks completed",
+  "@tasksCompleted": {
+    "description": "Tasks completed label",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  
+  "addTask": "Add Task",
+  "@addTask": {
+    "description": "Add task button"
+  },
+  
+  "noTasksFound": "No tasks found",
+  "@noTasksFound": {
+    "description": "Message when no tasks exist"
+  },
+  
+  "inactive": "Inactive",
+  "@inactive": {
+    "description": "Inactive status"
+  },
+  
+  "active": "Active",
+  "@active": {
+    "description": "Active status"
+  },
+  
+  "assign": "Assign",
+  "@assign": {
+    "description": "Assign button"
+  },
+  
+  "createTaskDefinition": "Create Task Definition",
+  "@createTaskDefinition": {
+    "description": "Create task definition dialog title"
+  },
+  
+  "title": "Title",
+  "@title": {
+    "description": "Title field label"
+  },
+  
+  "taskCreatedSuccessfully": "Task created successfully",
+  "@taskCreatedSuccessfully": {
+    "description": "Success message after creating task"
+  },
+  
+  "editTaskDefinition": "Edit Task Definition",
+  "@editTaskDefinition": {
+    "description": "Edit task definition dialog title"
+  },
+  
+  "taskCanBeAssigned": "Task can be assigned to users",
+  "@taskCanBeAssigned": {
+    "description": "Active task description"
+  },
+  
+  "taskUpdatedSuccessfully": "Task updated successfully",
+  "@taskUpdatedSuccessfully": {
+    "description": "Success message after updating task"
+  },
+  
+  "deleteTaskDefinition": "Delete Task Definition",
+  "@deleteTaskDefinition": {
+    "description": "Delete task definition dialog title"
+  },
+  
+  "deleteTaskConfirmation": "Are you sure you want to delete \"{title}\"?",
+  "@deleteTaskConfirmation": {
+    "description": "Delete task confirmation message",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Clean the kitchen"
+      }
+    }
+  },
+  
+  "taskDeletedSuccessfully": "Task deleted successfully",
+  "@taskDeletedSuccessfully": {
+    "description": "Success message after deleting task"
+  },
+  
+  "newAssignment": "New Assignment",
+  "@newAssignment": {
+    "description": "New assignment button"
+  },
+  
+  "noAssignmentsFound": "No assignments found",
+  "@noAssignmentsFound": {
+    "description": "Message when no assignments exist"
+  },
+  
+  "assignedTo": "Assigned to: {name}",
+  "@assignedTo": {
+    "description": "Assignment label",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "John"
+      }
+    }
+  },
+  
+  "due": "Due: {time}",
+  "@due": {
+    "description": "Due time label",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "14:00"
+      }
+    }
+  },
+  
+  "noTaskDefinitionsAvailable": "No task definitions available. Create one first.",
+  "@noTaskDefinitionsAvailable": {
+    "description": "Message when no task definitions exist"
+  },
+  
+  "noUsersAvailable": "No users available. Create a user first.",
+  "@noUsersAvailable": {
+    "description": "Message when no users exist"
+  },
+  
+  "createTaskAssignment": "Create Task Assignment",
+  "@createTaskAssignment": {
+    "description": "Create assignment dialog title"
+  },
+  
+  "task": "Task",
+  "@task": {
+    "description": "Task label"
+  },
+  
+  "assignTo": "Assign To",
+  "@assignTo": {
+    "description": "Assign to field label"
+  },
+  
+  "daily": "Daily",
+  "@daily": {
+    "description": "Daily schedule type"
+  },
+  
+  "weekly": "Weekly",
+  "@weekly": {
+    "description": "Weekly schedule type"
+  },
+  
+  "once": "Once",
+  "@once": {
+    "description": "Once schedule type"
+  },
+  
+  "selectDays": "Select Days",
+  "@selectDays": {
+    "description": "Select days heading"
+  },
+  
+  "monday": "Monday",
+  "@monday": {
+    "description": "Monday"
+  },
+  
+  "tuesday": "Tuesday",
+  "@tuesday": {
+    "description": "Tuesday"
+  },
+  
+  "wednesday": "Wednesday",
+  "@wednesday": {
+    "description": "Wednesday"
+  },
+  
+  "thursday": "Thursday",
+  "@thursday": {
+    "description": "Thursday"
+  },
+  
+  "friday": "Friday",
+  "@friday": {
+    "description": "Friday"
+  },
+  
+  "saturday": "Saturday",
+  "@saturday": {
+    "description": "Saturday"
+  },
+  
+  "sunday": "Sunday",
+  "@sunday": {
+    "description": "Sunday"
+  },
+  
+  "dueTime": "Due Time",
+  "@dueTime": {
+    "description": "Due time field label"
+  },
+  
+  "assignmentCreatedSuccessfully": "Assignment created successfully",
+  "@assignmentCreatedSuccessfully": {
+    "description": "Success message after creating assignment"
+  },
+  
+  "editAssignment": "Edit Assignment",
+  "@editAssignment": {
+    "description": "Edit assignment dialog title"
+  },
+  
+  "assignmentUpdatedSuccessfully": "Assignment updated successfully",
+  "@assignmentUpdatedSuccessfully": {
+    "description": "Success message after updating assignment"
+  },
+  
+  "deleteAssignment": "Delete Assignment",
+  "@deleteAssignment": {
+    "description": "Delete assignment dialog title"
+  },
+  
+  "deleteAssignmentConfirmation": "Are you sure you want to delete this assignment?",
+  "@deleteAssignmentConfirmation": {
+    "description": "Delete assignment confirmation message"
+  },
+  
+  "assignmentDeletedSuccessfully": "Assignment deleted successfully",
+  "@assignmentDeletedSuccessfully": {
+    "description": "Success message after deleting assignment"
+  },
+  
+  "pendingVerification": "Pending Verification",
+  "@pendingVerification": {
+    "description": "Pending verification heading"
+  },
+  
+  "noItemsInQueue": "No items in queue",
+  "@noItemsInQueue": {
+    "description": "Message when verification queue is empty"
+  },
+  
+  "allCaughtUp": "You're all caught up!",
+  "@allCaughtUp": {
+    "description": "Message when all verifications are complete"
+  },
+  
+  "completedBy": "Completed by {name}",
+  "@completedBy": {
+    "description": "Completed by label",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "John"
+      }
+    }
+  },
+  
+  "completedAt": "Completed at: {time}",
+  "@completedAt": {
+    "description": "Completed at label",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "2:30 PM"
+      }
+    }
+  },
+  
+  "failedToLoadImage": "Failed to load image",
+  "@failedToLoadImage": {
+    "description": "Error message when image fails to load"
+  },
+  
+  "verifyAndAwardPoints": "Verify & Award Points",
+  "@verifyAndAwardPoints": {
+    "description": "Verify button text"
+  },
+  
+  "reject": "Reject",
+  "@reject": {
+    "description": "Reject button"
+  },
+  
+  "verifyTask": "Verify Task",
+  "@verifyTask": {
+    "description": "Verify task dialog title"
+  },
+  
+  "verifyTaskConfirmation": "Award {points} points to {name}?",
+  "@verifyTaskConfirmation": {
+    "description": "Verify task confirmation message",
+    "placeholders": {
+      "points": {
+        "type": "int",
+        "example": "10"
+      },
+      "name": {
+        "type": "String",
+        "example": "John"
+      }
+    }
+  },
+  
+  "verify": "Verify",
+  "@verify": {
+    "description": "Verify button"
+  },
+  
+  "taskVerifiedPoints": "Task verified! {points} points awarded to {name}",
+  "@taskVerifiedPoints": {
+    "description": "Success message after verifying task",
+    "placeholders": {
+      "points": {
+        "type": "int",
+        "example": "10"
+      },
+      "name": {
+        "type": "String",
+        "example": "John"
+      }
+    }
+  },
+  
+  "rejectTask": "Reject Task",
+  "@rejectTask": {
+    "description": "Reject task dialog title"
+  },
+  
+  "rejectTaskConfirmation": "Reject \"{task}\" by {name}?",
+  "@rejectTaskConfirmation": {
+    "description": "Reject task confirmation message",
+    "placeholders": {
+      "task": {
+        "type": "String",
+        "example": "Clean room"
+      },
+      "name": {
+        "type": "String",
+        "example": "John"
+      }
+    }
+  },
+  
+  "taskRejected": "Task rejected",
+  "@taskRejected": {
+    "description": "Success message after rejecting task"
   }
 }
