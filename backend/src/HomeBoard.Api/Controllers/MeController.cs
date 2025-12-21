@@ -62,4 +62,26 @@ public class MeController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpPatch("language")]
+    public async Task<IActionResult> UpdateLanguage([FromBody] UpdateLanguageRequest request)
+    {
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        
+        var user = await _context.Users.FindAsync(userId);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        user.PreferredLanguage = request.PreferredLanguage;
+        await _context.SaveChangesAsync();
+
+        return Ok(new { preferredLanguage = user.PreferredLanguage });
+    }
+}
+
+public class UpdateLanguageRequest
+{
+    public required string PreferredLanguage { get; set; }
 }

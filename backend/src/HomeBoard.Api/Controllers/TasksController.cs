@@ -210,17 +210,23 @@ public class TasksController : ControllerBase
             return NotFound();
         }
 
-        if (request.IsActive.HasValue)
-        {
-            assignment.IsActive = request.IsActive.Value;
-        }
+        // Update required fields (always sent from frontend)
+        assignment.TaskDefinitionId = request.TaskDefinitionId ?? assignment.TaskDefinitionId;
+        assignment.AssignedToUserId = request.AssignedToUserId ?? assignment.AssignedToUserId;
+        assignment.ScheduleType = request.ScheduleType ?? assignment.ScheduleType;
+        assignment.DaysOfWeek = request.DaysOfWeek ?? assignment.DaysOfWeek;
+        assignment.IsActive = request.IsActive ?? assignment.IsActive;
 
-        if (request.DueTime.HasValue)
-        {
-            assignment.DueTime = request.DueTime.Value;
-        }
+        // Update nullable fields (null means clear the value)
+        assignment.StartDate = request.StartDate;
+        assignment.EndDate = request.EndDate;
+        assignment.DueTime = request.DueTime;
 
         await _context.SaveChangesAsync();
+
+        // Reload related data
+        await _context.Entry(assignment).Reference(a => a.TaskDefinition).LoadAsync();
+        await _context.Entry(assignment).Reference(a => a.AssignedToUser).LoadAsync();
 
         return Ok(new TaskAssignmentDto
         {

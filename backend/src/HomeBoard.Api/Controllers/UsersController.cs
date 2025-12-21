@@ -52,6 +52,7 @@ public class UsersController : ControllerBase
             DisplayName = request.DisplayName,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
             Role = request.Role,
+            PreferredLanguage = request.PreferredLanguage,
             IsActive = true,
             CreatedAt = DateTime.UtcNow
         };
@@ -99,6 +100,11 @@ public class UsersController : ControllerBase
                 }
             }
             user.Role = request.Role.Value;
+        }
+
+        if (request.PreferredLanguage != null)
+        {
+            user.PreferredLanguage = request.PreferredLanguage;
         }
 
         await _context.SaveChangesAsync();

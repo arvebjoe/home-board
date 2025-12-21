@@ -10,6 +10,7 @@ public class User
     public required string PasswordHash { get; set; }
     public UserRole Role { get; set; }
     public bool IsActive { get; set; }
+    public string PreferredLanguage { get; set; } = "en";
     public DateTime CreatedAt { get; set; }
     public DateTime? LastLoginAt { get; set; }
 

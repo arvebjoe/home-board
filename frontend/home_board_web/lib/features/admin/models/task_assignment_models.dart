@@ -42,8 +42,14 @@ class CreateTaskAssignmentRequest with _$CreateTaskAssignmentRequest {
 @freezed
 class UpdateTaskAssignmentRequest with _$UpdateTaskAssignmentRequest {
   const factory UpdateTaskAssignmentRequest({
-    bool? isActive,
+    String? taskDefinitionId,
+    String? assignedToUserId,
+    int? scheduleType,
+    int? daysOfWeek,
+    String? startDate,
+    String? endDate,
     String? dueTime,
+    bool? isActive,
   }) = _UpdateTaskAssignmentRequest;
 
   factory UpdateTaskAssignmentRequest.fromJson(Map<String, dynamic> json) =>

@@ -8,6 +8,7 @@ public class CreateUserRequest
     public required string DisplayName { get; set; }
     public required string Password { get; set; }
     public UserRole Role { get; set; }
+    public string PreferredLanguage { get; set; } = "en";
 }
 
 public class UpdateUserRequest
@@ -15,6 +16,7 @@ public class UpdateUserRequest
     public string? DisplayName { get; set; }
     public bool? IsActive { get; set; }
     public UserRole? Role { get; set; }
+    public string? PreferredLanguage { get; set; }
 }
 
 public class ResetPasswordRequest

@@ -3,6 +3,8 @@ import '../models/user_model.dart';
 import '../models/login_request.dart';
 import '../repositories/auth_repository.dart';
 import '../../../core/storage/storage_service.dart';
+import '../../../core/l10n/locale_provider.dart';
+import 'package:flutter/material.dart';
 
 part 'auth_provider.g.dart';
 
@@ -12,6 +14,12 @@ class AuthNotifier extends _$AuthNotifier {
   Future<UserModel?> build() async {
     // Check if user is already logged in
     final user = await ref.read(storageServiceProvider).getUser();
+    
+    // Load language preference if user is logged in
+    if (user != null) {
+      await ref.read(localeProvider.notifier).loadFromUser(user.preferredLanguage);
+    }
+    
     return user;
   }
 
@@ -27,6 +35,9 @@ class AuthNotifier extends _$AuthNotifier {
       await storage.saveAccessToken(response.accessToken);
       await storage.saveRefreshToken(response.refreshToken);
       await storage.saveUser(response.user);
+
+      // Load user's preferred language
+      await ref.read(localeProvider.notifier).loadFromUser(response.user.preferredLanguage);
 
       return response.user;
     });

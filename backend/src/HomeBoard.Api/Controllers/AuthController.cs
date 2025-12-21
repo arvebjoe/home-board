@@ -52,7 +52,8 @@ public class AuthController : ControllerBase
                 Id = user.Id,
                 Username = user.Username,
                 DisplayName = user.DisplayName,
-                Role = user.Role.ToString()
+                Role = user.Role.ToString(),
+                PreferredLanguage = user.PreferredLanguage
             }
         });
     }

@@ -240,6 +240,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
     final displayNameController = TextEditingController();
     final passwordController = TextEditingController();
     String selectedRole = 'User';
+    String selectedLanguage = 'en';
     bool isLoading = false;
     String? errorMessage;
 
@@ -292,6 +293,21 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                     setState(() => selectedRole = value!);
                   },
                 ),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<String>(
+                  value: selectedLanguage,
+                  decoration: InputDecoration(
+                    labelText: context.l10n.language,
+                    prefixIcon: const Icon(Icons.language),
+                  ),
+                  items: const [
+                    DropdownMenuItem(value: 'en', child: Text('English')),
+                    DropdownMenuItem(value: 'nb', child: Text('Norwegian Bokmål')),
+                  ],
+                  onChanged: (value) {
+                    setState(() => selectedLanguage = value!);
+                  },
+                ),
                 if (errorMessage != null) ...[
                   const SizedBox(height: 16),
                   Text(
@@ -325,6 +341,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                                 displayName: displayNameController.text,
                                 password: passwordController.text,
                                 role: selectedRole,
+                                preferredLanguage: selectedLanguage,
                               ),
                             );
                         if (dialogContext.mounted) {
@@ -362,6 +379,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
     final displayNameController =
         TextEditingController(text: user.displayName);
     String selectedRole = user.role;
+    String selectedLanguage = 'en'; // Default, will be loaded from user if available
     bool isLoading = false;
     String? errorMessage;
 
@@ -406,6 +424,21 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                     setState(() => selectedRole = value!);
                   },
                 ),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<String>(
+                  value: selectedLanguage,
+                  decoration: InputDecoration(
+                    labelText: context.l10n.language,
+                    prefixIcon: const Icon(Icons.language),
+                  ),
+                  items: const [
+                    DropdownMenuItem(value: 'en', child: Text('English')),
+                    DropdownMenuItem(value: 'nb', child: Text('Norwegian Bokmål')),
+                  ],
+                  onChanged: (value) {
+                    setState(() => selectedLanguage = value!);
+                  },
+                ),
                 if (errorMessage != null) ...[
                   const SizedBox(height: 16),
                   Text(
@@ -438,6 +471,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                               UpdateUserRequestModel(
                                 displayName: displayNameController.text,
                                 role: selectedRole,
+                                preferredLanguage: selectedLanguage,
                               ),
                             );
                         if (dialogContext.mounted) {

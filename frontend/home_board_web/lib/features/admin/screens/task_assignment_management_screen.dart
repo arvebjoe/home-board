@@ -584,71 +584,234 @@ class _TaskAssignmentManagementScreenState
   }
 
   void _showEditAssignmentDialog(TaskAssignmentModel assignment) {
-    bool isActive = assignment.isActive;
+    final taskDefinitionsAsync = ref.read(taskDefinitionManagementProvider);
+    final usersAsync = ref.read(userManagementProvider);
+
+    final taskDefinitions = taskDefinitionsAsync.value ?? [];
+    final users = usersAsync.value ?? [];
+
+    if (taskDefinitions.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.noTaskDefinitionsAvailable),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
+    if (users.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.noUsersAvailable),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
+    String selectedTaskId = assignment.taskDefinitionId;
+    String selectedUserId = assignment.assignedToUserId;
+    int scheduleType = assignment.scheduleType;
+    Set<int> selectedDays = _getDaysFromBitmask(assignment.daysOfWeek);
+    DateTime? startDate = assignment.startDate != null
+        ? DateTime.parse(assignment.startDate!)
+        : null;
+    DateTime? endDate = assignment.endDate != null
+        ? DateTime.parse(assignment.endDate!)
+        : null;
     TimeOfDay? dueTime = assignment.dueTime != null
         ? TimeOfDay(
             hour: int.parse(assignment.dueTime!.split(':')[0]),
             minute: int.parse(assignment.dueTime!.split(':')[1]),
           )
         : null;
+    bool isActive = assignment.isActive;
 
     showDialog(
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
           title: Text(context.l10n.editAssignment),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                assignment.taskTitle,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                '${context.l10n.assignedTo}: ${assignment.assignedToName}',
-                style: const TextStyle(color: Colors.grey),
-              ),
-              const SizedBox(height: 16),
-              SwitchListTile(
-                title: Text(context.l10n.active),
-                value: isActive,
-                onChanged: (value) => setDialogState(() => isActive = value),
-              ),
-              const SizedBox(height: 16),
-              Row(
+          content: SingleChildScrollView(
+            child: SizedBox(
+              width: 500,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () async {
-                        final time = await showTimePicker(
-                          context: context,
-                          initialTime: dueTime ?? TimeOfDay.now(),
-                        );
-                        if (time != null) {
-                          setDialogState(() => dueTime = time);
-                        }
-                      },
-                      icon: const Icon(Icons.access_time),
-                      label: Text(
-                        dueTime == null
-                            ? context.l10n.dueTimeOptional
-                            : dueTime!.format(context),
-                      ),
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      labelText: context.l10n.task,
+                      border: const OutlineInputBorder(),
                     ),
+                    value: selectedTaskId,
+                    items: taskDefinitions
+                        .where((t) => t.isActive)
+                        .map((task) => DropdownMenuItem(
+                              value: task.id,
+                              child: Text(task.title),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        setDialogState(() => selectedTaskId = value);
+                      }
+                    },
                   ),
-                  const SizedBox(width: 8),
-                  if (dueTime != null)
-                    IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () => setDialogState(() => dueTime = null),
+                  const SizedBox(height: 16),
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      labelText: context.l10n.assignTo,
+                      border: const OutlineInputBorder(),
                     ),
+                    value: selectedUserId,
+                    items: users
+                        .map((user) => DropdownMenuItem(
+                              value: user.id,
+                              child: Text(user.displayName),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        setDialogState(() => selectedUserId = value);
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    context.l10n.scheduleType,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  SegmentedButton<int>(
+                    segments: [
+                      ButtonSegment(value: 0, label: Text(context.l10n.daily)),
+                      ButtonSegment(value: 1, label: Text(context.l10n.weekly)),
+                      ButtonSegment(value: 2, label: Text(context.l10n.once)),
+                    ],
+                    selected: {scheduleType},
+                    onSelectionChanged: (Set<int> newSelection) {
+                      setDialogState(() => scheduleType = newSelection.first);
+                    },
+                  ),
+                  if (scheduleType == 1) ...[
+                    const SizedBox(height: 16),
+                    Text(
+                      context.l10n.daysOfWeek,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    _buildDayPicker(
+                      selectedDays: selectedDays,
+                      onChanged: (days) =>
+                          setDialogState(() => selectedDays = days),
+                    ),
+                  ],
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: () async {
+                            final date = await showDatePicker(
+                              context: context,
+                              initialDate: startDate ?? DateTime.now(),
+                              firstDate: DateTime.now(),
+                              lastDate: DateTime.now().add(const Duration(days: 365)),
+                            );
+                            if (date != null) {
+                              setDialogState(() => startDate = date);
+                            }
+                          },
+                          icon: const Icon(Icons.calendar_today),
+                          label: Text(
+                            startDate == null
+                                ? context.l10n.startDateOptional
+                                : DateFormat('yyyy-MM-dd').format(startDate!),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      if (startDate != null)
+                        IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () =>
+                              setDialogState(() => startDate = null),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: () async {
+                            final date = await showDatePicker(
+                              context: context,
+                              initialDate: endDate ?? startDate ?? DateTime.now(),
+                              firstDate: startDate ?? DateTime.now(),
+                              lastDate: DateTime.now().add(const Duration(days: 365)),
+                            );
+                            if (date != null) {
+                              setDialogState(() => endDate = date);
+                            }
+                          },
+                          icon: const Icon(Icons.calendar_today),
+                          label: Text(
+                            endDate == null
+                                ? context.l10n.endDateOptional
+                                : DateFormat('yyyy-MM-dd').format(endDate!),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      if (endDate != null)
+                        IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () => setDialogState(() => endDate = null),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: () async {
+                            final time = await showTimePicker(
+                              context: context,
+                              initialTime: dueTime ?? TimeOfDay.now(),
+                            );
+                            if (time != null) {
+                              setDialogState(() => dueTime = time);
+                            }
+                          },
+                          icon: const Icon(Icons.access_time),
+                          label: Text(
+                            dueTime == null
+                                ? context.l10n.dueTimeOptional
+                                : dueTime!.format(context),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      if (dueTime != null)
+                        IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () => setDialogState(() => dueTime = null),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  SwitchListTile(
+                    title: Text(context.l10n.active),
+                    value: isActive,
+                    onChanged: (value) => setDialogState(() => isActive = value),
+                  ),
                 ],
               ),
-            ],
+            ),
           ),
           actions: [
             TextButton(
@@ -658,12 +821,29 @@ class _TaskAssignmentManagementScreenState
             ElevatedButton(
               onPressed: () async {
                 try {
-                  final request = UpdateTaskAssignmentRequest(
-                    isActive: isActive,
-                    dueTime: dueTime != null
+                  final daysOfWeek = scheduleType == 1
+                      ? selectedDays.fold(0, (sum, day) => sum | day)
+                      : 127; // All days for daily/once
+
+                  // Create request with explicit JSON to ensure all fields are sent
+                  final requestJson = {
+                    'taskDefinitionId': selectedTaskId,
+                    'assignedToUserId': selectedUserId,
+                    'scheduleType': scheduleType,
+                    'daysOfWeek': daysOfWeek,
+                    'startDate': startDate != null
+                        ? DateFormat('yyyy-MM-dd').format(startDate!)
+                        : null,
+                    'endDate': endDate != null
+                        ? DateFormat('yyyy-MM-dd').format(endDate!)
+                        : null,
+                    'dueTime': dueTime != null
                         ? '${dueTime!.hour.toString().padLeft(2, '0')}:${dueTime!.minute.toString().padLeft(2, '0')}'
                         : null,
-                  );
+                    'isActive': isActive,
+                  };
+
+                  final request = UpdateTaskAssignmentRequest.fromJson(requestJson);
 
                   await ref
                       .read(taskAssignmentManagementProvider.notifier)
@@ -695,6 +875,18 @@ class _TaskAssignmentManagementScreenState
         ),
       ),
     );
+  }
+
+  Set<int> _getDaysFromBitmask(int bitmask) {
+    final days = <int>{};
+    if (bitmask & 1 != 0) days.add(1);
+    if (bitmask & 2 != 0) days.add(2);
+    if (bitmask & 4 != 0) days.add(4);
+    if (bitmask & 8 != 0) days.add(8);
+    if (bitmask & 16 != 0) days.add(16);
+    if (bitmask & 32 != 0) days.add(32);
+    if (bitmask & 64 != 0) days.add(64);
+    return days;
   }
 
   void _showDeleteConfirmationDialog(TaskAssignmentModel assignment) {

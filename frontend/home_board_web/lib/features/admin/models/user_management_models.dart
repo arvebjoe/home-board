@@ -23,6 +23,7 @@ class CreateUserRequestModel with _$CreateUserRequestModel {
     required String displayName,
     required String password,
     required String role,
+    @Default('en') String preferredLanguage,
   }) = _CreateUserRequestModel;
 
   factory CreateUserRequestModel.fromJson(Map<String, dynamic> json) =>
@@ -35,6 +36,7 @@ class UpdateUserRequestModel with _$UpdateUserRequestModel {
     String? displayName,
     bool? isActive,
     String? role,
+    String? preferredLanguage,
   }) = _UpdateUserRequestModel;
 
   factory UpdateUserRequestModel.fromJson(Map<String, dynamic> json) =>

@@ -56,8 +56,14 @@ class TaskAssignmentRepository {
       final response = await _dio.patch(
         '/tasks/assignments/$assignmentId',
         data: {
+          if (request.taskDefinitionId != null) 'taskDefinitionId': request.taskDefinitionId,
+          if (request.assignedToUserId != null) 'assignedToUserId': request.assignedToUserId,
+          if (request.scheduleType != null) 'scheduleType': request.scheduleType,
+          if (request.daysOfWeek != null) 'daysOfWeek': request.daysOfWeek,
+          'startDate': request.startDate,  // Include even if null to allow clearing
+          'endDate': request.endDate,      // Include even if null to allow clearing
+          'dueTime': request.dueTime,      // Include even if null to allow clearing
           if (request.isActive != null) 'isActive': request.isActive,
-          if (request.dueTime != null) 'dueTime': request.dueTime,
         },
       );
       return TaskAssignmentModel.fromJson(response.data);

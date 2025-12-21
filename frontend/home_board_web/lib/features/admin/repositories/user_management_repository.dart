@@ -40,6 +40,7 @@ class UserManagementRepository {
           'displayName': request.displayName,
           'password': request.password,
           'role': roleValue,
+          'preferredLanguage': request.preferredLanguage,
         },
       );
       return UserManagementModel.fromJson(response.data);
@@ -64,6 +65,7 @@ class UserManagementRepository {
           if (request.displayName != null) 'displayName': request.displayName,
           if (request.isActive != null) 'isActive': request.isActive,
           if (roleValue != null) 'role': roleValue,
+          if (request.preferredLanguage != null) 'preferredLanguage': request.preferredLanguage,
         },
       );
       return UserManagementModel.fromJson(response.data);
