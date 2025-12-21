@@ -379,7 +379,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
     final displayNameController =
         TextEditingController(text: user.displayName);
     String selectedRole = user.role;
-    String selectedLanguage = 'en'; // Default, will be loaded from user if available
+    String selectedLanguage = user.preferredLanguage;
     bool isLoading = false;
     String? errorMessage;
 

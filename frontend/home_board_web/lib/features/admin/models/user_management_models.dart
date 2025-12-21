@@ -10,6 +10,7 @@ class UserManagementModel with _$UserManagementModel {
     required String username,
     required String displayName,
     required String role,
+    @Default('en') String preferredLanguage,
   }) = _UserManagementModel;
 
   factory UserManagementModel.fromJson(Map<String, dynamic> json) =>

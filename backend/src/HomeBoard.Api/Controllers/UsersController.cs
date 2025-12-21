@@ -29,7 +29,8 @@ public class UsersController : ControllerBase
                 Id = u.Id,
                 Username = u.Username,
                 DisplayName = u.DisplayName,
-                Role = u.Role.ToString()
+                Role = u.Role.ToString(),
+                PreferredLanguage = u.PreferredLanguage
             })
             .ToListAsync();
 
@@ -65,7 +66,8 @@ public class UsersController : ControllerBase
             Id = user.Id,
             Username = user.Username,
             DisplayName = user.DisplayName,
-            Role = user.Role.ToString()
+            Role = user.Role.ToString(),
+            PreferredLanguage = user.PreferredLanguage
         });
     }
 
@@ -114,7 +116,8 @@ public class UsersController : ControllerBase
             Id = user.Id,
             Username = user.Username,
             DisplayName = user.DisplayName,
-            Role = user.Role.ToString()
+            Role = user.Role.ToString(),
+            PreferredLanguage = user.PreferredLanguage
         });
     }
 
