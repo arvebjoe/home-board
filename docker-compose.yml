@@ -21,7 +21,7 @@ services:
 
   api:
     build:
-      context: ../backend
+      context: ./backend
       dockerfile: Dockerfile
     container_name: home-board-api
     environment:
@@ -36,6 +36,17 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./frontend/home_board_web
+      dockerfile: Dockerfile
+    container_name: home-board-web
+    ports:
+      - "3001:80"
+    depends_on:
+      - api
     restart: unless-stopped
 
 volumes:
