@@ -8,7 +8,7 @@ services:
     environment:
       POSTGRES_DB: homeboard
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres123
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -26,10 +26,10 @@ services:
     container_name: home-board-api
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__Default: "Host=db;Port=5432;Database=homeboard;Username=postgres;Password=postgres123"
+      ConnectionStrings__Default: "Host=db;Port=5432;Database=homeboard;Username=postgres;Password=${POSTGRES_PASSWORD}"
       Jwt__Issuer: "HomeBoard"
       Jwt__Audience: "HomeBoard"
-      Jwt__SigningKey: "YourSuperSecretKeyThatIsAtLeast32CharactersLongForDevelopment!"
+      Jwt__SigningKey: "${JWT_SIGNING_KEY}"
       App__Timezone: "Europe/Oslo"
     ports:
       - "8080:8080"
