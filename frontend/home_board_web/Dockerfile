@@ -31,6 +31,9 @@ COPY . .
 # Generate localization files
 RUN flutter gen-l10n
 
+# Generate code (freezed, json_serializable, etc.)
+RUN flutter pub run build_runner build --delete-conflicting-outputs
+
 # Enable web for the project
 RUN flutter create . --platforms web
 
