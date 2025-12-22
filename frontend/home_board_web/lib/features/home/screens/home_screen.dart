@@ -99,8 +99,8 @@ class HomeScreen extends ConsumerWidget {
                 const SizedBox(height: 16),
                 _buildMenuCard(
                   context,
-                  title: 'Calendar',
-                  subtitle: 'View upcoming tasks and schedules',
+                  title: context.l10n.calendar,
+                  subtitle: context.l10n.calendarSubtitle,
                   icon: Icons.calendar_month,
                   onTap: () => context.go('/calendar'),
                 ),

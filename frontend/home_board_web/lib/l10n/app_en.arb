@@ -971,5 +971,96 @@
   "taskRejected": "Task rejected",
   "@taskRejected": {
     "description": "Success message after rejecting task"
+  },
+  
+  "calendar": "Calendar",
+  "@calendar": {
+    "description": "Calendar screen title"
+  },
+  
+  "calendarSubtitle": "View upcoming tasks and schedules",
+  "@calendarSubtitle": {
+    "description": "Calendar menu subtitle"
+  },
+  
+  "sunday": "Sunday",
+  "@sunday": {
+    "description": "Sunday day name"
+  },
+  
+  "monday": "Monday",
+  "@monday": {
+    "description": "Monday day name"
+  },
+  
+  "tuesday": "Tuesday",
+  "@tuesday": {
+    "description": "Tuesday day name"
+  },
+  
+  "wednesday": "Wednesday",
+  "@wednesday": {
+    "description": "Wednesday day name"
+  },
+  
+  "thursday": "Thursday",
+  "@thursday": {
+    "description": "Thursday day name"
+  },
+  
+  "friday": "Friday",
+  "@friday": {
+    "description": "Friday day name"
+  },
+  
+  "saturday": "Saturday",
+  "@saturday": {
+    "description": "Saturday day name"
+  },
+  
+  "sun": "Sun",
+  "@sun": {
+    "description": "Sunday short name"
+  },
+  
+  "mon": "Mon",
+  "@mon": {
+    "description": "Monday short name"
+  },
+  
+  "tue": "Tue",
+  "@tue": {
+    "description": "Tuesday short name"
+  },
+  
+  "wed": "Wed",
+  "@wed": {
+    "description": "Wednesday short name"
+  },
+  
+  "thu": "Thu",
+  "@thu": {
+    "description": "Thursday short name"
+  },
+  
+  "fri": "Fri",
+  "@fri": {
+    "description": "Friday short name"
+  },
+  
+  "sat": "Sat",
+  "@sat": {
+    "description": "Saturday short name"
+  },
+  
+  "moreTasksCount": "+{count} more",
+  "@moreTasksCount": {
+    "description": "Message showing additional task count",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
   }
 }

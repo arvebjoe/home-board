@@ -173,5 +173,22 @@
   "taskVerifiedPoints": "Oppgave verifisert! {points} poeng gitt til {name}",
   "rejectTask": "Avvis oppgave",
   "rejectTaskConfirmation": "Avvis \"{task}\" av {name}?",
-  "taskRejected": "Oppgave avvist"
+  "taskRejected": "Oppgave avvist",
+  "calendar": "Kalender",
+  "calendarSubtitle": "Se kommende oppgaver og tidsplaner",
+  "sunday": "Søndag",
+  "monday": "Mandag",
+  "tuesday": "Tirsdag",
+  "wednesday": "Onsdag",
+  "thursday": "Torsdag",
+  "friday": "Fredag",
+  "saturday": "Lørdag",
+  "sun": "Søn",
+  "mon": "Man",
+  "tue": "Tir",
+  "wed": "Ons",
+  "thu": "Tor",
+  "fri": "Fre",
+  "sat": "Lør",
+  "moreTasksCount": "+{count} flere"
 }

@@ -48,7 +48,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Calendar'),
+        title: Text(context.l10n.calendar),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.go('/'),
@@ -154,7 +154,15 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
         Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Row(
-            children: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+            children: [
+              context.l10n.sun,
+              context.l10n.mon,
+              context.l10n.tue,
+              context.l10n.wed,
+              context.l10n.thu,
+              context.l10n.fri,
+              context.l10n.sat
+            ]
                 .map((day) => Expanded(
                       child: Center(
                         child: Text(
@@ -269,7 +277,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                     )),
                 if (tasks.length > 2)
                   Text(
-                    '+${tasks.length - 2} more',
+                    context.l10n.moreTasksCount(tasks.length - 2),
                     style: const TextStyle(fontSize: 9, color: Colors.grey),
                   ),
               ],
