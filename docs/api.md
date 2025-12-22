@@ -2,7 +2,15 @@
 
 ## Base URL
 - Development: `http://localhost:8080`
-- Production: TBD
+- Production: Configure via your deployment
+
+## Default Credentials
+
+On first startup, the system creates a default admin user:
+- **Username**: `admin`
+- **Password**: `Admin123!`
+
+**⚠️ Important**: Change this password immediately after your first login in production!
 
 ## Authentication
 
@@ -428,4 +436,15 @@ Not currently implemented. Future consideration.
 ## Swagger UI
 
 Interactive API documentation available at:
-- Development: http://localhost:8080
+- Development: http://localhost:8080/swagger
+- Production: http://your-domain/swagger (disable in production for security)
+
+## Database Seeding
+
+The API automatically:
+1. **Runs migrations** on startup (creates/updates database schema)
+2. **Seeds initial data** if database is empty:
+   - Creates default admin user (`admin` / `Admin123!`)
+   - Creates default family settings (timezone, point rates)
+
+This happens in all environments, but only when the database is empty, so it's safe for production deployments.

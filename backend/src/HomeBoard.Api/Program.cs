@@ -106,11 +106,9 @@ using (var scope = app.Services.CreateScope())
     {
         await context.Database.MigrateAsync();
         
-        // Only seed in development to avoid overwriting production data
-        if (app.Environment.IsDevelopment())
-        {
-            await seeder.SeedAsync();
-        }
+        // Seed initial data (admin user, family settings)
+        // Safe to run in production - DbSeeder checks if users already exist
+        await seeder.SeedAsync();
     }
     catch (Exception ex)
     {
