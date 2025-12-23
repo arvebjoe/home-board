@@ -25,8 +25,9 @@ public class LeaderboardController : ControllerBase
     public async Task<ActionResult<List<LeaderboardEntryDto>>> GetLeaderboard([FromQuery] string? period = "all")
     {
         DateTime? fromDate = null;
+        DateTime? toDate = null;
         
-        if (period == "week")
+        if (period == "week" || period == "previousWeek")
         {
             // Get the week start day from family settings
             var settings = await _context.FamilySettings.FirstOrDefaultAsync();
@@ -37,16 +38,28 @@ public class LeaderboardController : ControllerBase
             
             // Calculate days to subtract to get to the start of the week
             var daysToSubtract = (currentDayOfWeek - weekStartsOn + 7) % 7;
-            fromDate = today.AddDays(-daysToSubtract);
+            var weekStart = today.AddDays(-daysToSubtract);
+            
+            if (period == "previousWeek")
+            {
+                // Previous week: from 7 days before week start to the day before week start
+                toDate = weekStart.AddDays(-1);
+                fromDate = toDate.Value.AddDays(-6);
+            }
+            else
+            {
+                // Current week: from week start to today
+                fromDate = weekStart;
+            }
         }
         else if (period == "month")
         {
             // Start from the first day of the current month
             var today = DateTime.UtcNow.Date;
-            fromDate = new DateTime(today.Year, today.Month, 1);
+            fromDate = new DateTime(today.Year, today.Month, 1, 0, 0, 0, DateTimeKind.Utc);
         }
 
-        var pointsByUser = await _pointsService.GetLeaderboardAsync(fromDate);
+        var pointsByUser = await _pointsService.GetLeaderboardAsync(fromDate, toDate);
         var userIds = pointsByUser.Keys.ToList();
 
         var users = await _context.Users
@@ -60,6 +73,11 @@ public class LeaderboardController : ControllerBase
         if (fromDate.HasValue)
         {
             tasksCompletedQuery = tasksCompletedQuery.Where(tc => tc.CompletedAt >= fromDate.Value);
+        }
+        
+        if (toDate.HasValue)
+        {
+            tasksCompletedQuery = tasksCompletedQuery.Where(tc => tc.CompletedAt <= toDate.Value.AddDays(1).AddTicks(-1));
         }
         
         var tasksCompleted = await tasksCompletedQuery

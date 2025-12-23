@@ -9,7 +9,7 @@ public interface IPointsService
 {
     Task<int> GetUserTotalPointsAsync(Guid userId);
     Task<List<PointsLedger>> GetUserPointsHistoryAsync(Guid userId, int limit = 50);
-    Task<Dictionary<Guid, int>> GetLeaderboardAsync(DateTime? fromDate = null);
+    Task<Dictionary<Guid, int>> GetLeaderboardAsync(DateTime? fromDate = null, DateTime? toDate = null);
     Task AddPointsAsync(Guid userId, PointSourceType sourceType, int points, Guid? sourceId, string? note, Guid createdByUserId);
 }
 
@@ -40,13 +40,18 @@ public class PointsService : IPointsService
             .ToListAsync();
     }
 
-    public async Task<Dictionary<Guid, int>> GetLeaderboardAsync(DateTime? fromDate = null)
+    public async Task<Dictionary<Guid, int>> GetLeaderboardAsync(DateTime? fromDate = null, DateTime? toDate = null)
     {
         var query = _context.PointsLedger.AsQueryable();
 
         if (fromDate.HasValue)
         {
             query = query.Where(p => p.CreatedAt >= fromDate.Value);
+        }
+        
+        if (toDate.HasValue)
+        {
+            query = query.Where(p => p.CreatedAt <= toDate.Value.AddDays(1).AddTicks(-1)); // End of toDate
         }
 
         var leaderboard = await query

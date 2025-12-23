@@ -90,6 +90,8 @@
   "userDeletedSuccessfully": "Bruker slettet",
   "topPerformers": "Toppytere",
   "week": "Uke",
+  "thisWeek": "Denne uken",
+  "previousWeek": "Forrige uke",
   "month": "Måned",
   "allTime": "Alltid",
   "noEntriesYet": "Ingen oppføringer ennå",

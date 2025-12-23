@@ -49,8 +49,13 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                   segments: [
                     ButtonSegment(
                       value: 'week',
-                      label: Text(context.l10n.week),
+                      label: Text(context.l10n.thisWeek),
                       icon: const Icon(Icons.calendar_view_week),
+                    ),
+                    ButtonSegment(
+                      value: 'previousWeek',
+                      label: Text(context.l10n.previousWeek),
+                      icon: const Icon(Icons.history),
                     ),
                     ButtonSegment(
                       value: 'month',

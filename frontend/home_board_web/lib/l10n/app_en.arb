@@ -477,6 +477,16 @@
     "description": "Week time period"
   },
   
+  "thisWeek": "This Week",
+  "@thisWeek": {
+    "description": "This week period label"
+  },
+  
+  "previousWeek": "Previous Week",
+  "@previousWeek": {
+    "description": "Previous week period label"
+  },
+  
   "month": "Month",
   "@month": {
     "description": "Month time period"
