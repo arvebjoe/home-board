@@ -24,12 +24,27 @@ public class LeaderboardController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<LeaderboardEntryDto>>> GetLeaderboard([FromQuery] string? period = "all")
     {
-        DateTime? fromDate = period switch
+        DateTime? fromDate = null;
+        
+        if (period == "week")
         {
-            "week" => DateTime.UtcNow.AddDays(-7),
-            "month" => DateTime.UtcNow.AddMonths(-1),
-            _ => null
-        };
+            // Get the week start day from family settings
+            var settings = await _context.FamilySettings.FirstOrDefaultAsync();
+            var weekStartsOn = (int)(settings?.WeekStartsOn ?? DayOfWeek.Monday);
+            
+            var today = DateTime.UtcNow.Date;
+            var currentDayOfWeek = (int)today.DayOfWeek;
+            
+            // Calculate days to subtract to get to the start of the week
+            var daysToSubtract = (currentDayOfWeek - weekStartsOn + 7) % 7;
+            fromDate = today.AddDays(-daysToSubtract);
+        }
+        else if (period == "month")
+        {
+            // Start from the first day of the current month
+            var today = DateTime.UtcNow.Date;
+            fromDate = new DateTime(today.Year, today.Month, 1);
+        }
 
         var pointsByUser = await _pointsService.GetLeaderboardAsync(fromDate);
         var userIds = pointsByUser.Keys.ToList();
