@@ -85,13 +85,30 @@ builder.Services.AddScoped<IPointsService, PointsService>();
 builder.Services.AddScoped<DbSeeder>();
 
 // Configure CORS
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Value ?? "*";
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("AllowConfiguredOrigins", policy =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        if (allowedOrigins == "*")
+        {
+            // Allow all origins (for development or flexible deployments)
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        }
+        else
+        {
+            // Allow specific origins (comma-separated list)
+            var origins = allowedOrigins.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                       .Select(o => o.Trim())
+                                       .ToArray();
+            policy.WithOrigins(origins)
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .AllowCredentials();
+        }
     });
 });
 
@@ -136,7 +153,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
-app.UseCors("AllowAll");
+app.UseCors("AllowConfiguredOrigins");
 
 app.UseAuthentication();
 app.UseAuthorization();

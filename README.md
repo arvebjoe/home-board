@@ -280,6 +280,18 @@ Required environment variables in `.env`:
 | `POSTGRES_PASSWORD` | Database password | `securepassword123` |
 | `JWT_SIGNING_KEY` | JWT signing key (min 32 chars) | `your-secret-key-min-32-chars` |
 
+Optional environment variables:
+
+| Variable | Description | Default | Example |
+|----------|-------------|---------|---------|
+| `Cors__AllowedOrigins` | Comma-separated allowed CORS origins | `*` (all) | `https://yourdomain.com,https://www.yourdomain.com` |
+
+**CORS Configuration:**
+- Default (`*`) allows all origins - suitable for development or flexible deployments
+- For production, set specific origins: `Cors__AllowedOrigins=https://yourdomain.com,https://www.yourdomain.com`
+- Can be configured in appsettings.json or via environment variable
+- Multiple origins separated by commas
+
 ## API Documentation
 
 Full API documentation is available at:
