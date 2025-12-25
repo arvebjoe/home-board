@@ -30,49 +30,57 @@ class AdminScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 24),
                 Expanded(
-                  child: GridView.count(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 2,
-                    children: [
-                      _buildAdminCard(
-                        context,
-                        title: context.l10n.users,
-                        icon: Icons.people,
-                        onTap: () => context.go('/admin/users'),
-                      ),
-                      _buildAdminCard(
-                        context,
-                        title: context.l10n.taskDefinitions,
-                        icon: Icons.task,
-                        onTap: () => context.go('/admin/tasks'),
-                      ),
-                      _buildAdminCard(
-                        context,
-                        title: context.l10n.taskAssignments,
-                        icon: Icons.assignment,
-                        onTap: () => context.go('/admin/assignments'),
-                      ),
-                      _buildAdminCard(
-                        context,
-                        title: context.l10n.verificationQueue,
-                        icon: Icons.verified,
-                        onTap: () => context.go('/admin/verification-queue'),
-                      ),
-                      _buildAdminCard(
-                        context,
-                        title: context.l10n.analytics,
-                        icon: Icons.analytics,
-                        onTap: () => context.go('/analytics'),
-                      ),
-                      _buildAdminCard(
-                        context,
-                        title: context.l10n.settings,
-                        icon: Icons.settings,
-                        onTap: () => context.go('/admin/settings'),
-                      ),
-                    ],
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      // Use responsive grid layout
+                      final crossAxisCount = constraints.maxWidth > 600 ? 2 : 1;
+                      final childAspectRatio = constraints.maxWidth > 600 ? 2.0 : 2.5;
+                      
+                      return GridView.count(
+                        crossAxisCount: crossAxisCount,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        childAspectRatio: childAspectRatio,
+                        children: [
+                          _buildAdminCard(
+                            context,
+                            title: context.l10n.users,
+                            icon: Icons.people,
+                            onTap: () => context.go('/admin/users'),
+                          ),
+                          _buildAdminCard(
+                            context,
+                            title: context.l10n.taskDefinitions,
+                            icon: Icons.task,
+                            onTap: () => context.go('/admin/tasks'),
+                          ),
+                          _buildAdminCard(
+                            context,
+                            title: context.l10n.taskAssignments,
+                            icon: Icons.assignment,
+                            onTap: () => context.go('/admin/assignments'),
+                          ),
+                          _buildAdminCard(
+                            context,
+                            title: context.l10n.verificationQueue,
+                            icon: Icons.verified,
+                            onTap: () => context.go('/admin/verification-queue'),
+                          ),
+                          _buildAdminCard(
+                            context,
+                            title: context.l10n.analytics,
+                            icon: Icons.analytics,
+                            onTap: () => context.go('/analytics'),
+                          ),
+                          _buildAdminCard(
+                            context,
+                            title: context.l10n.settings,
+                            icon: Icons.settings,
+                            onTap: () => context.go('/admin/settings'),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ],

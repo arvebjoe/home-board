@@ -45,37 +45,51 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 16),
-                SegmentedButton<String>(
-                  segments: [
-                    ButtonSegment(
-                      value: 'week',
-                      label: Text(context.l10n.thisWeek),
-                      icon: const Icon(Icons.calendar_view_week),
-                    ),
-                    ButtonSegment(
-                      value: 'previousWeek',
-                      label: Text(context.l10n.previousWeek),
-                      icon: const Icon(Icons.history),
-                    ),
-                    ButtonSegment(
-                      value: 'month',
-                      label: Text(context.l10n.month),
-                      icon: const Icon(Icons.calendar_month),
-                    ),
-                    ButtonSegment(
-                      value: 'all',
-                      label: Text(context.l10n.allTime),
-                      icon: const Icon(Icons.all_inclusive),
-                    ),
-                  ],
-                  selected: {_selectedPeriod},
-                  onSelectionChanged: (Set<String> selection) {
-                    setState(() {
-                      _selectedPeriod = selection.first;
-                    });
-                    ref
-                        .read(leaderboardProvider.notifier)
-                        .setPeriod(_selectedPeriod);
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Use vertical layout for narrow screens
+                    final showLabels = constraints.maxWidth > 500;
+                    
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: SegmentedButton<String>(
+                        segments: [
+                          ButtonSegment(
+                            value: 'week',
+                            label: showLabels ? Text(context.l10n.thisWeek) : null,
+                            icon: Icon(Icons.calendar_view_week, size: showLabels ? null : 20),
+                            tooltip: showLabels ? null : context.l10n.thisWeek,
+                          ),
+                          ButtonSegment(
+                            value: 'previousWeek',
+                            label: showLabels ? Text(context.l10n.previousWeek) : null,
+                            icon: Icon(Icons.history, size: showLabels ? null : 20),
+                            tooltip: showLabels ? null : context.l10n.previousWeek,
+                          ),
+                          ButtonSegment(
+                            value: 'month',
+                            label: showLabels ? Text(context.l10n.month) : null,
+                            icon: Icon(Icons.calendar_month, size: showLabels ? null : 20),
+                            tooltip: showLabels ? null : context.l10n.month,
+                          ),
+                          ButtonSegment(
+                            value: 'all',
+                            label: showLabels ? Text(context.l10n.allTime) : null,
+                            icon: Icon(Icons.all_inclusive, size: showLabels ? null : 20),
+                            tooltip: showLabels ? null : context.l10n.allTime,
+                          ),
+                        ],
+                        selected: {_selectedPeriod},
+                        onSelectionChanged: (Set<String> selection) {
+                          setState(() {
+                            _selectedPeriod = selection.first;
+                          });
+                          ref
+                              .read(leaderboardProvider.notifier)
+                              .setPeriod(_selectedPeriod);
+                        },
+                      ),
+                    );
                   },
                 ),
                 const SizedBox(height: 24),

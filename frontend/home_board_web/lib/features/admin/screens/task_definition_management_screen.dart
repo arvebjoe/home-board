@@ -137,111 +137,238 @@ class TaskDefinitionManagementScreen extends ConsumerWidget {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: task.isActive ? Colors.green : Colors.grey,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.task_alt,
-                color: Colors.white,
-                size: 28,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            // Use vertical layout for narrow screens
+            final isNarrow = constraints.maxWidth < 600;
+            
+            if (isNarrow) {
+              return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    task.title,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
+                  Row(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: task.isActive ? Colors.green : Colors.grey,
+                          shape: BoxShape.circle,
                         ),
+                        child: const Icon(
+                          Icons.task_alt,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              task.title,
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                            if (task.description != null) ...[
+                              const SizedBox(height: 2),
+                              Text(
+                                task.description!,
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Colors.grey[600],
+                                    ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  if (task.description != null) ...[
-                    const SizedBox(height: 4),
-                    Text(
-                      task.description!,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.grey[600],
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.star, color: Colors.amber, size: 20),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${task.defaultPoints} pts',
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                        ],
+                      ),
+                      const SizedBox(width: 12),
+                      if (!task.isActive)
+                        Chip(
+                          label: Text(context.l10n.inactive),
+                          backgroundColor: Colors.grey,
+                          labelStyle: const TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                      const Spacer(),
+                      ElevatedButton.icon(
+                        onPressed: () => _showAssignTaskDialog(context, ref, task),
+                        icon: const Icon(Icons.person_add, size: 18),
+                        label: Text(context.l10n.assign),
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      PopupMenuButton<String>(
+                        onSelected: (value) {
+                          switch (value) {
+                            case 'edit':
+                              _showEditTaskDialog(context, ref, task);
+                              break;
+                            case 'delete':
+                              _showDeleteConfirmationDialog(context, ref, task);
+                              break;
+                          }
+                        },
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            value: 'edit',
+                            child: Row(
+                              children: [
+                                const Icon(Icons.edit),
+                                const SizedBox(width: 8),
+                                Text(context.l10n.edit),
+                              ],
+                            ),
+                          ),
+                          PopupMenuItem(
+                            value: 'delete',
+                            child: Row(
+                              children: [
+                                const Icon(Icons.delete, color: Colors.red),
+                                const SizedBox(width: 8),
+                                Text(context.l10n.delete,
+                                    style: const TextStyle(color: Colors.red)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            }
+            
+            // Original horizontal layout for wider screens
+            return Row(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: task.isActive ? Colors.green : Colors.grey,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.task_alt,
+                    color: Colors.white,
+                    size: 28,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        task.title,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      if (task.description != null) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          task.description!,
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: Colors.grey[600],
+                              ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Row(
+                  children: [
+                    const Icon(Icons.star, color: Colors.amber, size: 20),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${task.defaultPoints} pts',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                   ],
-                ],
-              ),
-            ),
-            const SizedBox(width: 16),
-            Row(
-              children: [
-                const Icon(Icons.star, color: Colors.amber, size: 20),
-                const SizedBox(width: 4),
-                Text(
-                  '${task.defaultPoints} pts',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
+                ),
+                const SizedBox(width: 8),
+                if (!task.isActive)
+                  Chip(
+                    label: Text(context.l10n.inactive),
+                    backgroundColor: Colors.grey,
+                    labelStyle: const TextStyle(color: Colors.white, fontSize: 12),
+                  ),
+                const SizedBox(width: 8),
+                ElevatedButton.icon(
+                  onPressed: () => _showAssignTaskDialog(context, ref, task),
+                  icon: const Icon(Icons.person_add, size: 18),
+                  label: Text(context.l10n.assign),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                PopupMenuButton<String>(
+                  onSelected: (value) {
+                    switch (value) {
+                      case 'edit':
+                        _showEditTaskDialog(context, ref, task);
+                        break;
+                      case 'delete':
+                        _showDeleteConfirmationDialog(context, ref, task);
+                        break;
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: 'edit',
+                      child: Row(
+                        children: [
+                          const Icon(Icons.edit),
+                          const SizedBox(width: 8),
+                          Text(context.l10n.edit),
+                        ],
                       ),
+                    ),
+                    PopupMenuItem(
+                      value: 'delete',
+                      child: Row(
+                        children: [
+                          const Icon(Icons.delete, color: Colors.red),
+                          const SizedBox(width: 8),
+                          Text(context.l10n.delete, style: const TextStyle(color: Colors.red)),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
-            ),
-            const SizedBox(width: 8),
-            if (!task.isActive)
-              Chip(
-                label: Text(context.l10n.inactive),
-                backgroundColor: Colors.grey,
-                labelStyle: const TextStyle(color: Colors.white, fontSize: 12),
-              ),
-            const SizedBox(width: 8),
-            ElevatedButton.icon(
-              onPressed: () => _showAssignTaskDialog(context, ref, task),
-              icon: const Icon(Icons.person_add, size: 18),
-              label: Text(context.l10n.assign),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              ),
-            ),
-            const SizedBox(width: 8),
-            PopupMenuButton<String>(
-              onSelected: (value) {
-                switch (value) {
-                  case 'edit':
-                    _showEditTaskDialog(context, ref, task);
-                    break;
-                  case 'delete':
-                    _showDeleteConfirmationDialog(context, ref, task);
-                    break;
-                }
-              },
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                  value: 'edit',
-                  child: Row(
-                    children: [
-                      const Icon(Icons.edit),
-                      const SizedBox(width: 8),
-                      Text(context.l10n.edit),
-                    ],
-                  ),
-                ),
-                PopupMenuItem(
-                  value: 'delete',
-                  child: Row(
-                    children: [
-                      const Icon(Icons.delete, color: Colors.red),
-                      const SizedBox(width: 8),
-                      Text(context.l10n.delete, style: const TextStyle(color: Colors.red)),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
