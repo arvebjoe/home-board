@@ -5,6 +5,17 @@
     "description": "The title of the application"
   },
   
+  "userTasksTitle": "{name}'s Tasks",
+  "@userTasksTitle": {
+    "description": "Personalized title showing the user's name",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "John"
+      }
+    }
+  },
+  
   "login": "Login",
   "@login": {
     "description": "Login button and screen title"

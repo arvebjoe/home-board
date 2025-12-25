@@ -1,6 +1,7 @@
 {
   "@@locale": "nb",
-  "appTitle": "Emil og Emely's oppgaver",
+  "appTitle": "Familieoppgaver",
+  "userTasksTitle": "{name}s oppgaver",
   "login": "Logg inn",
   "logout": "Logg ut",
   "username": "Brukernavn",
