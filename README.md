@@ -47,17 +47,25 @@ A family chores and rewards management system designed for families with childre
 
 2. **Create environment file**:
    ```bash
-   # Copy the example (create .env.example if needed)
+   # Copy the example file
+   cp .env.example .env
+   
    # Or create .env directly with these values:
    cat > .env << EOF
    POSTGRES_DB=homeboard
    POSTGRES_USER=homeboarduser
    POSTGRES_PASSWORD=your_secure_password
    JWT_SIGNING_KEY=your_jwt_signing_key_min_32_chars_long
+   BACKEND_PORT=8080
+   FRONTEND_PORT=3001
    EOF
    ```
    
    **Important**: Change the passwords and JWT key to secure values!
+   
+   **Note**: Port configuration is optional. If not specified, the application uses defaults:
+   - `BACKEND_PORT` defaults to `8080`
+   - `FRONTEND_PORT` defaults to `3001`
 
 3. **Start all services**:
    ```bash
@@ -252,12 +260,14 @@ POST to `/api/tasks/assignments`:
    POSTGRES_USER=homeboarduser
    POSTGRES_PASSWORD=<strong_password>
    JWT_SIGNING_KEY=<strong_random_key_at_least_32_chars>
+   BACKEND_PORT=8080
+   FRONTEND_PORT=3001
    ```
 
 2. **Update docker-compose.yml** for production:
    - Change `ASPNETCORE_ENVIRONMENT` to `Production` in the `api` service
-   - Consider using environment-specific ports
    - Set up proper SSL/TLS termination (reverse proxy)
+   - Configure ports via `.env` if different from defaults
 
 3. **Deploy**:
    ```bash
@@ -285,7 +295,15 @@ Optional environment variables:
 
 | Variable | Description | Default | Example |
 |----------|-------------|---------|---------|
+| `BACKEND_PORT` | Port for the backend API | `8080` | `8080` |
+| `FRONTEND_PORT` | Port for the frontend web application | `3001` | `3001` |
 | `Cors__AllowedOrigins` | Comma-separated allowed CORS origins | `*` (all) | `https://yourdomain.com,https://www.yourdomain.com` |
+
+**Port Configuration:**
+- Both `BACKEND_PORT` and `FRONTEND_PORT` are optional
+- If not specified in `.env`, the application uses the default values
+- The frontend automatically proxies API requests to the configured backend port
+- Useful for avoiding port conflicts or deploying multiple instances
 
 **CORS Configuration:**
 - Default (`*`) allows all origins - suitable for development or flexible deployments
