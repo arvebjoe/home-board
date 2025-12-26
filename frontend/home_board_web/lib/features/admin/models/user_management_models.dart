@@ -60,3 +60,14 @@ class ResetPasswordRequestModel with _$ResetPasswordRequestModel {
   factory ResetPasswordRequestModel.fromJson(Map<String, dynamic> json) =>
       _$ResetPasswordRequestModelFromJson(json);
 }
+
+@freezed
+class BonusPointsRequestModel with _$BonusPointsRequestModel {
+  const factory BonusPointsRequestModel({
+    required int points,
+    String? description,
+  }) = _BonusPointsRequestModel;
+
+  factory BonusPointsRequestModel.fromJson(Map<String, dynamic> json) =>
+      _$BonusPointsRequestModelFromJson(json);
+}

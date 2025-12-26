@@ -25,3 +25,9 @@ public class ResetPasswordRequest
 {
     public required string NewPassword { get; set; }
 }
+
+public class BonusPointsRequest
+{
+    public required int Points { get; set; }
+    public string? Description { get; set; }
+}

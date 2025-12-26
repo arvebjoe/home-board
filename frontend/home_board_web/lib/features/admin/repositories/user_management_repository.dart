@@ -138,4 +138,18 @@ class UserManagementRepository {
       rethrow;
     }
   }
+
+  Future<void> awardBonusPoints(
+    String userId,
+    BonusPointsRequestModel request,
+  ) async {
+    try {
+      await _dio.post(
+        '/users/$userId/bonus-points',
+        data: request.toJson(),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

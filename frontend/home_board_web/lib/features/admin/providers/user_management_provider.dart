@@ -75,4 +75,17 @@ class UserManagement extends _$UserManagement {
       rethrow;
     }
   }
+
+  Future<void> awardBonusPoints(
+    String userId,
+    BonusPointsRequestModel request,
+  ) async {
+    try {
+      final repository = ref.read(userManagementRepositoryProvider);
+      await repository.awardBonusPoints(userId, request);
+      await refresh();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

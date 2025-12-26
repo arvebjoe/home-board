@@ -196,6 +196,9 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                   case 'reset_points':
                     _showResetPointsDialog(context, user);
                     break;
+                  case 'bonus_points':
+                    _showBonusPointsDialog(context, user);
+                    break;
                   case 'delete':
                     _showDeleteConfirmationDialog(context, user);
                     break;
@@ -229,6 +232,16 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                       const Icon(Icons.refresh),
                       const SizedBox(width: 8),
                       Text(context.l10n.resetPoints),
+                    ],
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 'bonus_points',
+                  child: Row(
+                    children: [
+                      const Icon(Icons.star),
+                      const SizedBox(width: 8),
+                      Text(context.l10n.bonusPoints),
                     ],
                   ),
                 ),
@@ -970,6 +983,119 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : Text(context.l10n.delete),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showBonusPointsDialog(
+      BuildContext context, UserManagementModel user) {
+    final pointsController = TextEditingController();
+    final descriptionController = TextEditingController();
+    bool isLoading = false;
+    String? errorMessage;
+
+    showDialog(
+      context: context,
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: Text(context.l10n.bonusPointsFor(user.displayName)),
+          content: SizedBox(
+            width: 400,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: pointsController,
+                  decoration: InputDecoration(
+                    labelText: context.l10n.points,
+                    prefixIcon: const Icon(Icons.star),
+                  ),
+                  keyboardType: TextInputType.number,
+                  autofocus: true,
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: descriptionController,
+                  decoration: InputDecoration(
+                    labelText: '${context.l10n.description} (${context.l10n.optional})',
+                    prefixIcon: const Icon(Icons.notes),
+                  ),
+                  maxLines: 3,
+                ),
+                if (errorMessage != null) ...[
+                  const SizedBox(height: 16),
+                  Text(
+                    errorMessage!,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: isLoading ? null : () => Navigator.pop(dialogContext),
+              child: Text(context.l10n.cancel),
+            ),
+            ElevatedButton(
+              onPressed: isLoading
+                  ? null
+                  : () async {
+                      final points = int.tryParse(pointsController.text);
+                      if (points == null || points <= 0) {
+                        setState(() {
+                          errorMessage = context.l10n.pleaseEnterValidPoints;
+                        });
+                        return;
+                      }
+
+                      setState(() {
+                        isLoading = true;
+                        errorMessage = null;
+                      });
+
+                      try {
+                        await ref
+                            .read(userManagementProvider.notifier)
+                            .awardBonusPoints(
+                              user.id,
+                              BonusPointsRequestModel(
+                                points: points,
+                                description: descriptionController.text.isEmpty
+                                    ? null
+                                    : descriptionController.text,
+                              ),
+                            );
+                        if (dialogContext.mounted) {
+                          Navigator.pop(dialogContext);
+                          ScaffoldMessenger.of(this.context).showSnackBar(
+                            SnackBar(
+                              content: Text(context.l10n.bonusPointsAwarded),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        setState(() {
+                          isLoading = false;
+                          errorMessage = e.toString();
+                        });
+                      }
+                    },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.amber,
+                foregroundColor: Colors.black,
+              ),
+              child: isLoading
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Text(context.l10n.award),
             ),
           ],
         ),

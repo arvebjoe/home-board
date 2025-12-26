@@ -499,6 +499,42 @@
     "description": "Success message after resetting points"
   },
   
+  "bonusPoints": "Bonus Points",
+  "@bonusPoints": {
+    "description": "Bonus points menu item"
+  },
+  
+  "bonusPointsFor": "Award Bonus Points to {name}",
+  "@bonusPointsFor": {
+    "description": "Bonus points dialog title",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "John Doe"
+      }
+    }
+  },
+  
+  "bonusPointsAwarded": "Bonus points awarded successfully",
+  "@bonusPointsAwarded": {
+    "description": "Success message after awarding bonus points"
+  },
+  
+  "pleaseEnterValidPoints": "Please enter a valid number of points (greater than 0)",
+  "@pleaseEnterValidPoints": {
+    "description": "Error message for invalid points input"
+  },
+  
+  "award": "Award",
+  "@award": {
+    "description": "Award button text"
+  },
+  
+  "optional": "optional",
+  "@optional": {
+    "description": "Optional field indicator"
+  },
+  
   "createNewUser": "Create New User",
   "@createNewUser": {
     "description": "Create user dialog title"

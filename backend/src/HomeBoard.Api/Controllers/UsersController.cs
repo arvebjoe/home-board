@@ -244,6 +244,46 @@ public class UsersController : ControllerBase
         return Ok(new { message = "Points reset successfully", pointsReset = currentPoints });
     }
 
+    [HttpPost("{id}/bonus-points")]
+    public async Task<IActionResult> AwardBonusPoints(Guid id, [FromBody] BonusPointsRequest request)
+    {
+        var user = await _context.Users.FindAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        if (request.Points <= 0)
+        {
+            return BadRequest(new { message = "Points must be greater than zero" });
+        }
+
+        // Get current user ID (the admin awarding the bonus)
+        var adminUserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(adminUserId))
+        {
+            return Unauthorized();
+        }
+
+        // Create a bonus points entry
+        var bonusEntry = new PointsLedger
+        {
+            Id = Guid.NewGuid(),
+            UserId = id,
+            SourceType = PointSourceType.Bonus,
+            SourceId = null,
+            PointsDelta = request.Points,
+            Note = string.IsNullOrWhiteSpace(request.Description) ? "Bonus" : request.Description,
+            CreatedByUserId = Guid.Parse(adminUserId),
+            CreatedAt = DateTime.UtcNow
+        };
+
+        _context.PointsLedger.Add(bonusEntry);
+        await _context.SaveChangesAsync();
+
+        return Ok(new { message = "Bonus points awarded successfully", pointsAwarded = request.Points });
+    }
+
     [HttpGet("{id}/profile-image")]
     [AllowAnonymous]
     public async Task<IActionResult> GetProfileImage(Guid id)
