@@ -30,97 +30,85 @@ class TodayScreen extends ConsumerWidget {
           constraints: const BoxConstraints(maxWidth: 800),
           child: Padding(
             padding: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  context.l10n.myTasksForToday,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 24),
-                Expanded(
-                  child: todayTasksAsync.when(
-                    data: (tasks) {
-                      if (tasks.isEmpty) {
-                        return Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.task_alt,
-                                size: 64,
-                                color: Colors.grey[400],
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                context.l10n.noTasksToday,
-                                style: Theme.of(context).textTheme.titleLarge,
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                context.l10n.enjoyFreeTime,
-                                style: Theme.of(context).textTheme.bodyMedium,
-                              ),
-                            ],
-                          ),
-                        );
-                      }
+            child: todayTasksAsync.when(
+              data: (tasks) {
+                if (tasks.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.task_alt,
+                          size: 64,
+                          color: Colors.grey[400],
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          context.l10n.noTasksToday,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          context.l10n.enjoyFreeTime,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ],
+                    ),
+                  );
+                }
 
-                      return ListView.separated(
-                        itemCount: tasks.length,
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(height: 12),
-                        itemBuilder: (context, index) {
-                          final task = tasks[index];
-                          return _buildTaskCard(
-                            context,
-                            ref,
-                            assignmentId: task.assignmentId,
-                            title: task.title,
-                            description: task.description ?? '',
-                            points: task.points,
-                            isCompleted: task.isCompleted,
-                            requiresVerification: false,
-                          );
-                        },
-                      );
-                    },
-                    loading: () => const Center(
-                      child: CircularProgressIndicator(),
+                return ListView.separated(
+                  itemCount: tasks.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    final task = tasks[index];
+                    return _buildTaskCard(
+                      context,
+                      ref,
+                      assignmentId: task.assignmentId,
+                      title: task.title,
+                      description: task.description ?? '',
+                      points: task.points,
+                      isCompleted: task.isCompleted,
+                      requiresVerification: false,
+                    );
+                  },
+                );
+              },
+              loading: () => const Center(
+                child: CircularProgressIndicator(),
+              ),
+              error: (error, stack) => Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.error_outline,
+                      size: 64,
+                      color: Colors.red,
                     ),
-                    error: (error, stack) => Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.error_outline,
-                            size: 64,
-                            color: Colors.red,
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            context.l10n.errorLoadingTasks,
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            context.l10n.errorMessage(error.toString()),
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 16),
-                          ElevatedButton(
-                            onPressed: () => ref
-                                .read(todayTasksProvider.notifier)
-                                .refresh(),
-                            child: Text(context.l10n.retry),
-                          ),
-                        ],
-                      ),
+                    const SizedBox(height: 16),
+                    Text(
+                      context.l10n.errorLoadingTasks,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
-                  ),
+                    const SizedBox(height: 8),
+                    Text(
+                      context.l10n.errorMessage(error.toString()),
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () => ref
+                          .read(todayTasksProvider.notifier)
+                          .refresh(),
+                      child: Text(context.l10n.retry),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
