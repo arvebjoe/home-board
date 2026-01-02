@@ -311,6 +311,10 @@ public class TasksController : ControllerBase
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var isAdmin = User.IsInRole("Admin");
 
+        // Get family settings for week start configuration
+        var familySettings = await _context.FamilySettings.FirstOrDefaultAsync();
+        var weekStartsOn = familySettings?.WeekStartsOn ?? DayOfWeek.Monday;
+
         // Get all active assignments for the user (or all if admin)
         var assignmentsQuery = _context.TaskAssignments
             .Include(a => a.TaskDefinition)
@@ -339,20 +343,51 @@ public class TasksController : ControllerBase
 
             foreach (var assignment in assignments)
             {
-                // Check if task is scheduled for this date
-                bool isScheduledForDate = assignment.ScheduleType switch
-                {
-                    ScheduleType.Daily => ((int)assignment.DaysOfWeek & dayFlag) != 0,
-                    ScheduleType.Weekly => ((int)assignment.DaysOfWeek & dayFlag) != 0,
-                    ScheduleType.Once => assignment.StartDate == date,
-                    _ => false
-                };
-
                 // Check date range constraints
                 if (assignment.StartDate.HasValue && date < assignment.StartDate.Value)
                     continue;
                 if (assignment.EndDate.HasValue && date > assignment.EndDate.Value)
                     continue;
+
+                bool isScheduledForDate = false;
+
+                // Check if task is scheduled for this date based on schedule type
+                switch (assignment.ScheduleType)
+                {
+                    case ScheduleType.Daily:
+                        isScheduledForDate = ((int)assignment.DaysOfWeek & dayFlag) != 0;
+                        break;
+                    
+                    case ScheduleType.Weekly:
+                        isScheduledForDate = ((int)assignment.DaysOfWeek & dayFlag) != 0;
+                        break;
+                    
+                    case ScheduleType.Once:
+                        isScheduledForDate = assignment.StartDate == date;
+                        break;
+                    
+                    case ScheduleType.DuringWeek:
+                        // Show on first day of week and every day until completed
+                        var weekStart = GetStartOfWeek(date, weekStartsOn);
+                        var weekEnd = weekStart.AddDays(6);
+                        var completionThisWeek = completions.FirstOrDefault(
+                            c => c.TaskAssignmentId == assignment.Id && 
+                                 c.Date >= weekStart && c.Date <= weekEnd);
+                        // Show if not completed this week and date is on or after the week start day
+                        isScheduledForDate = completionThisWeek == null && date >= weekStart;
+                        break;
+                    
+                    case ScheduleType.DuringMonth:
+                        // Show on first day of month and every day until completed
+                        var monthStart = new DateOnly(date.Year, date.Month, 1);
+                        var monthEnd = monthStart.AddMonths(1).AddDays(-1);
+                        var completionThisMonth = completions.FirstOrDefault(
+                            c => c.TaskAssignmentId == assignment.Id && 
+                                 c.Date >= monthStart && c.Date <= monthEnd);
+                        // Show if not completed this month
+                        isScheduledForDate = completionThisMonth == null && date >= monthStart;
+                        break;
+                }
 
                 if (isScheduledForDate)
                 {
@@ -378,5 +413,15 @@ public class TasksController : ControllerBase
         }
 
         return Ok(calendarTasks.OrderBy(t => t.Date).ThenBy(t => t.DueTime).ToList());
+    }
+
+    private static DateOnly GetStartOfWeek(DateOnly date, DayOfWeek weekStartsOn)
+    {
+        var currentDayOfWeek = (int)date.DayOfWeek;
+        var targetStartDay = (int)weekStartsOn;
+        
+        // Calculate days to subtract to get to the start of the week
+        var daysToSubtract = (currentDayOfWeek - targetStartDay + 7) % 7;
+        return date.AddDays(-daysToSubtract);
     }
 }
